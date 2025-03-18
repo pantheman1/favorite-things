@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useState } from "react";
 
 const FavoriteList = ({title, initialItems }) => {
     const [items, setItems] = useState(initialItems);
