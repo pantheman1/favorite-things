@@ -1,8 +1,11 @@
 import React, {useState} from "react";
-import { useState } from "react";
 
 const FavoriteList = ({title, initialItems }) => {
     const [items, setItems] = useState(initialItems);
+
+const [newItem, setNewItem] = useState("");
+
+const handleInputChange = (e) => setNewItem(e.target.value)
 
     return (
         <div className="bg-white shadow-md rounded-lg p-4 m-2">
@@ -12,6 +15,13 @@ const FavoriteList = ({title, initialItems }) => {
                     <li key={index} className="text-gray-700">{item}</li>
                 ))}
             </ul>
+            {/* Input for new items */}
+            <input
+                type="text"
+                value={newItem}
+                onChange={handleInputChange}
+                placeholder={`Add a new ${title.toLowerCase()}...`}
+            />
         </div>
     )
 }
