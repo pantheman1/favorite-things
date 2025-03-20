@@ -7,6 +7,18 @@ const FavoriteList = ({title, initialItems }) => {
 
     const handleInputChange = (e) => setNewItem(e.target.value)
 
+    const handleAddItem = (e) => {
+        e.preventDefault(); // Prevents the page from refreshing
+
+        if (!newItem.trim()) return; //Ignore empty input
+
+        // Update the items list
+        setItems([...items, newItem]);
+
+        // Clear the input
+        setNewItem("");
+    };
+
     return (
         <div className="bg-white shadow-md rounded-lg p-4 m-2">
             <h2 className="text-xl font-bold">{title}</h2>
@@ -16,12 +28,15 @@ const FavoriteList = ({title, initialItems }) => {
                 ))}
             </ul>
             {/* Input for new items */}
-            <input
-                type="text"
-                value={newItem}
-                onChange={handleInputChange}
-                placeholder={`Add a new ${title.toLowerCase()}...`}
-            />
+            <form onSubmit={handleAddItem}>
+                <input
+                    type="text"
+                    value={newItem}
+                    onChange={handleInputChange}
+                    placeholder={`Add a new ${title.toLowerCase()}...`}
+                />
+                <button type="submit">Add</button>
+            </form>
         </div>
     )
 }
