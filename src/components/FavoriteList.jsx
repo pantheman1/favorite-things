@@ -3,9 +3,9 @@ import React, {useState} from "react";
 const FavoriteList = ({title, initialItems }) => {
     const [items, setItems] = useState(initialItems);
 
-const [newItem, setNewItem] = useState("");
+    const [newItem, setNewItem] = useState("");
 
-const handleInputChange = (e) => setNewItem(e.target.value)
+    const handleInputChange = (e) => setNewItem(e.target.value)
 
     return (
         <div className="bg-white shadow-md rounded-lg p-4 m-2">
