@@ -19,12 +19,21 @@ const FavoriteList = ({title, initialItems }) => {
         setNewItem("");
     };
 
+    // Function to delete an item by index
+    const handleDeleteItem = (indexToDelete) => {
+        const updatedItems = items.filter((_, index) => index !== indexToDelete);
+        setItems(updatedItems);
+    };
+
     return (
         <div className="bg-white shadow-md rounded-lg p-4 m-2">
             <h2 className="text-xl font-bold">{title}</h2>
             <ul className="list-disc pl-5">
                 {items.map((item, index) => (
-                    <li key={index} className="text-gray-700">{item}</li>
+                    <li key={index} className="text-gray-700">
+                        {item}
+                        <button onClick={() => handleDeleteItem(index)}>Delete</button>
+                    </li>
                 ))}
             </ul>
             {/* Input for new items */}
