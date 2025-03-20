@@ -1,53 +1,101 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-const FavoriteList = ({title, initialItems }) => {
-    const [items, setItems] = useState(initialItems);
+function FavoriteList({ title, initialItems }) {
+  const [items, setItems] = useState(initialItems);
+  const [editIndex, setEditIndex] = useState(null); // Step 1: Track which item is being edited
+  const [editText, setEditText] = useState("");
 
-    const [newItem, setNewItem] = useState("");
+  // Add new item
+  const addItem = (newItem) => {
+    setItems([...items, newItem]);
+  };
 
-    const handleInputChange = (e) => setNewItem(e.target.value)
+  // Delete an item
+  const deleteItem = (indexToDelete) => {
+    const updatedItems = items.filter((_, index) => index !== indexToDelete);
+    setItems(updatedItems);
+  };
 
-    const handleAddItem = (e) => {
-        e.preventDefault(); // Prevents the page from refreshing
+  // Enable edit mode
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setEditText(items[index]);
+  };
 
-        if (!newItem.trim()) return; //Ignore empty input
+  // Save edited item
+  const saveEdit = () => {
+    const updatedItems = items.map((item, index) =>
+      index === editIndex ? editText : item
+    );
+    setItems(updatedItems);
+    setEditIndex(null); // Exit edit mode
+    setEditText("");
+  };
 
-        // Update the items list
-        setItems([...items, newItem]);
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">{title}</h1>
 
-        // Clear the input
-        setNewItem("");
-    };
+      {/* Input to add new item */}
+      <input
+        type="text"
+        placeholder="Add a new favorite..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.target.value.trim() !== "") {
+            addItem(e.target.value.trim());
+            e.target.value = "";
+          }
+        }}
+        className="border p-2 rounded w-full mb-4"
+      />
 
-    // Function to delete an item by index
-    const handleDeleteItem = (indexToDelete) => {
-        const updatedItems = items.filter((_, index) => index !== indexToDelete);
-        setItems(updatedItems);
-    };
+      {/* List of items */}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index} className="flex justify-between items-center mb-2">
+            {editIndex === index ? (
+              // Input field while editing
+              <input
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && saveEdit()}
+                className="border p-2 rounded w-full"
+              />
+            ) : (
+              // Regular item view
+              <span>{item}</span>
+            )}
 
-    return (
-        <div className="bg-white shadow-md rounded-lg p-4 m-2">
-            <h2 className="text-xl font-bold">{title}</h2>
-            <ul className="list-disc pl-5">
-                {items.map((item, index) => (
-                    <li key={index} className="text-gray-700">
-                        {item}
-                        <button onClick={() => handleDeleteItem(index)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
-            {/* Input for new items */}
-            <form onSubmit={handleAddItem}>
-                <input
-                    type="text"
-                    value={newItem}
-                    onChange={handleInputChange}
-                    placeholder={`Add a new ${title.toLowerCase()}...`}
-                />
-                <button type="submit">Add</button>
-            </form>
-        </div>
-    )
+            <div>
+              {editIndex === index ? (
+                <button
+                  onClick={saveEdit}
+                  className="ml-2 text-blue-500 hover:underline"
+                >
+                  Save
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => startEditing(index)}
+                    className="ml-2 text-yellow-500 hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteItem(index)}
+                    className="ml-2 text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default FavoriteList
+export default FavoriteList;
