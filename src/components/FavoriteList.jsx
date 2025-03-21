@@ -1,39 +1,24 @@
 import React, { useState } from "react";
 
-function FavoriteList({ title, initialItems }) {
-  const [items, setItems] = useState(initialItems);
-  const [editIndex, setEditIndex] = useState(null); // Step 1: Track which item is being edited
+function FavoriteList({ title, initialItems, addItem, deleteItem, editItem }) {
+  const [editIndex, setEditIndex] = useState(null);
   const [editText, setEditText] = useState("");
-
-  // Add new item
-  const addItem = (newItem) => {
-    setItems([...items, newItem]);
-  };
-
-  // Delete an item
-  const deleteItem = (indexToDelete) => {
-    const updatedItems = items.filter((_, index) => index !== indexToDelete);
-    setItems(updatedItems);
-  };
 
   // Enable edit mode
   const startEditing = (index) => {
     setEditIndex(index);
-    setEditText(items[index]);
+    setEditText(initialItems[index]);
   };
 
   // Save edited item
   const saveEdit = () => {
-    const updatedItems = items.map((item, index) =>
-      index === editIndex ? editText : item
-    );
-    setItems(updatedItems);
-    setEditIndex(null); // Exit edit mode
+    editItem(editIndex, editText);
+    setEditIndex(null);
     setEditText("");
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
 
       {/* Input to add new item */}
@@ -51,7 +36,7 @@ function FavoriteList({ title, initialItems }) {
 
       {/* List of items */}
       <ul>
-        {items.map((item, index) => (
+        {initialItems.map((item, index) => (
           <li key={index} className="flex justify-between items-center mb-2">
             {editIndex === index ? (
               // Input field while editing
