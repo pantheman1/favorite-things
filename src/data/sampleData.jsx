@@ -1,7 +1,8 @@
-const sampleFavorites = {
-    movies: ["Hook", "Truman Show", "Fall Guy", "Dune"],
-    books: ["Calvin & Hobbes", "Cradle", "Hero's Guide"],
-    foods: ["Pizza", "Caesar Salad", "Paprikas"],
-};
-
-export default sampleFavorites
+// sampleFavorites.js
+const sampleFavorites = [
+    { id: 1, title: "Movies", items: ["Inception", "The Matrix"] },
+    { id: 2, title: "Books", items: ["1984", "Dune"] },
+  ];
+  
+  export default sampleFavorites;
+  

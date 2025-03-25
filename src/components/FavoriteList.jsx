@@ -1,21 +1,40 @@
 import React, { useState } from "react";
 
-function FavoriteList({ title, initialItems, addItem, deleteItem, editItem }) {
-  const [editIndex, setEditIndex] = useState(null);
-  const [editText, setEditText] = useState("");
+function FavoriteList({ title, initialItems, onItemsChange }) {
+    const [items, setItems] = useState(initialItems);
+    const [editIndex, setEditIndex] = useState(null);
+    const [editText, setEditText] = useState("");
+  
+    const updateItems = (newItems) => {
+      setItems(newItems);
+      onItemsChange(newItems); // Sync with parent (App.jsx)
+    };
+  
+    // Add new item
+    const addItem = (newItem) => {
+      updateItems([...items, newItem]);
+    };
+  
+    // Delete an item
+    const deleteItem = (indexToDelete) => {
+      updateItems(items.filter((_, index) => index !== indexToDelete));
+    };
 
-  // Enable edit mode
-  const startEditing = (index) => {
-    setEditIndex(index);
-    setEditText(initialItems[index]);
-  };
-
-  // Save edited item
-  const saveEdit = () => {
-    editItem(editIndex, editText);
-    setEditIndex(null);
-    setEditText("");
-  };
+    // Enable edit mode
+    const startEditing = (index) => {
+        setEditIndex(index);
+        setEditText(items[index]);
+    };
+  
+    // Save edited item
+    const saveEdit = () => {
+      const updatedItems = items.map((item, index) =>
+        index === editIndex ? editText : item
+      );
+      updateItems(updatedItems);
+      setEditIndex(null);
+      setEditText("");
+    };
 
   return (
     <div className="p-4">
