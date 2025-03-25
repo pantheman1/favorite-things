@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
-function FavoriteList({ title, initialItems, onItemsChange }) {
+function FavoriteList({ title, initialItems, onItemsChange, onDelete, onRename }) {
     const [items, setItems] = useState(initialItems);
     const [editIndex, setEditIndex] = useState(null);
     const [editText, setEditText] = useState("");
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [newTitle, setNewTitle] = useState(title);
   
     const updateItems = (newItems) => {
       setItems(newItems);
@@ -36,9 +38,36 @@ function FavoriteList({ title, initialItems, onItemsChange }) {
       setEditText("");
     };
 
+    // Edit Title
+    const saveTitleEdit = () => {
+        if (newTitle.trim()) {
+            onRename(newTitle);
+            setIsEditingTitle(false);
+        }
+    };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">{title}</h1>
+    <div className="flex items-center mb-4">
+    {isEditingTitle ? (
+        <input
+        type="text"
+        value={newTitle}
+        onChange={(e) => setNewTitle(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && saveTitleEdit()}
+        onBlur={saveTitleEdit} // Save when user clicks away
+        className="border p-1 rounded"
+        />
+    ) : (
+        <h1 className="text-2xl font-bold">{title}</h1>
+    )}
+    <button
+        onClick={() => setIsEditingTitle(true)}
+        className="ml-4 text-blue-600 hover:underline"
+    >
+        Edit List Name
+    </button>
+    </div>
 
       {/* Input to add new item */}
       <input
@@ -98,6 +127,10 @@ function FavoriteList({ title, initialItems, onItemsChange }) {
           </li>
         ))}
       </ul>
+      <button
+        onClick={onDelete}
+        className="ml-4 text-red-600 hover:underline"
+        >Delete List</button>
     </div>
   );
 }

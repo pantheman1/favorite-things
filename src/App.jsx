@@ -20,6 +20,19 @@ function App() {
     );
   };
 
+  const deleteList = (listId) => {
+    setLists(lists.filter((list) => list.id !== listId));
+  };
+
+  // Rename a list by its id
+  const renameList = (listId, newTitle) => {
+    setLists(
+      lists.map((list) =>
+        list.id === listId ? { ...list, title: newTitle } : list
+      )
+    );
+  };
+
   return (
     <div>
       <h1>Favorite Things</h1>
@@ -43,6 +56,8 @@ function App() {
           title={list.title}
           initialItems={list.items}
           onItemsChange={(newItems) => updateListItems(list.id, newItems)}
+          onDelete={() => deleteList(list.id)} 
+          onRename={(newTitle) => renameList(list.id, newTitle)}
         />
       ))}
     </div>
